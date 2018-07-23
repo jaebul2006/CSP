@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.RawDataMapper">
+
+	<insert id="insertTSA">
+		INSERT INTO 
+			tsa_raw (user_id, reg_date, file_name) 
+		VALUES 
+			(#{user_id}, #{reg_date}, #{file_name})
+	</insert>
+	
+	<select id="getTSA" resultType="com.crc.CSP.bean.RawTSAVO">
+		SELECT * FROM tsa_raw
+		WHERE user_id=#{user_id}
+	</select>
+	
+	<select id="getTSAFilename" resultType="String">
+		SELECT file_name FROM tsa_raw
+		WHERE id=#{raw_id}
+	</select>
+	
+	<insert id="insertOS">
+		INSERT INTO 
+			os_raw (user_id, reg_date, file_name) 
+		VALUES 
+			(#{user_id}, #{reg_date}, #{file_name})
+	</insert>
+	
+	<select id="getOS" resultType="com.crc.CSP.bean.RawOSVO">
+		SELECT * FROM os_raw
+		WHERE user_id=#{user_id}
+	</select>
+	
+	<select id="getOSFilename" resultType="String">
+		SELECT file_name FROM os_raw
+		WHERE id=#{raw_id}
+	</select>
+	
+</mapper>

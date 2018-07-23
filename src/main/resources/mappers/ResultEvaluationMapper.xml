@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.ResultEvaluationMapper">
+
+	<insert id="insert">
+		INSERT INTO result_eval (content_type, total_score, middle_score1, middle_score2, middle_score3, username) 
+		VALUES (#{content_type}, #{total_score}, #{middle_score1}, #{middle_score2}, #{middle_score3}, #{username})
+	</insert>
+
+	<select id="countOper" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			result_eval
+		WHERE 
+			username = #{username}
+		AND
+			content_type = #{content_type}
+	</select>
+
+	<select id="list" resultType="com.crc.CSP.bean.EvalTSA">
+		SELECT * FROM 
+		(
+			SELECT @ROWNUM:= @ROWNUM + 1 as rn, A.* FROM
+			(
+				SELECT b.id, b.upload_date, b.content_type, b.total_score, b.middle_score1, b.middle_score2, b.middle_score3, b.username AS userName
+				FROM 
+					result_eval b,
+					(SELECT @ROWNUM:=0)R
+				WHERE 
+					b.username = #{username} 
+				AND 
+					b.content_type = #{content_type}
+			)A
+		)B WHERE rn BETWEEN #{start} AND #{end}
+	</select>   
+	
+	<select id="view" resultType="com.crc.CSP.bean.EvalTSA">
+		SELECT * 
+		FROM
+			result_eval
+		WHERE
+			id = #{id}
+	</select>
+	
+
+</mapper>

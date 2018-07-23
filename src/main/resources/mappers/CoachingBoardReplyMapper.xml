@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.CoachingBoardReplyMapper">
+	
+	<insert id="insert_eval">
+		INSERT INTO coaching_board_reply (bno, score, replytext, replyer, writer, fileName)
+		VALUES (#{bno}, #{score}, #{replytext}, #{replyer}, #{writer}, #{fileName})
+	</insert>
+	
+	<!--  <select id="rp_list" resultType="com.crc.CSP.bean.CoachingBoardReplyVO">
+		<include refid="pagingHeader" />
+			SELECT 
+				r.rno, r.bno, r.replytext, r.replyer, r.regdate, m.user_id AS userName,
+				(SELECT writer FROM coaching_board WHERE bno=r.bno) AS writer
+			FROM coaching_board b, coaching_board_reply r, member m
+			WHERE b.bno=#{bno}
+			AND r.replyer=m.user_id
+			ORDER BY r.rno DESC
+		<include refid="pagingFooter" />
+	</select>
+	-->
+	
+	<select id="rp_list" resultType="com.crc.CSP.bean.CoachingBoardReplyVO">
+		SELECT 
+			rno, bno, score, replytext, replyer, regdate, writer, fileName
+		FROM coaching_board_reply
+		WHERE bno=#{bno}
+		ORDER BY rno DESC	
+	</select>
+	
+	<select id="rp_detail" resultType="com.crc.CSP.bean.CoachingBoardReplyVO">
+		SELECT rno, bno, replytext, replyer, regdate, updatedate, secret_reply AS secretReply FROM coaching_board_reply
+		WHERE rno = #{rno}
+	</select>
+	
+	<select id="rp_update">
+		UPDATE coaching_board_reply
+		SET replytext = #{replytext}
+		WHERE rno = #{rno}
+	</select>
+	
+	<delete id="rp_delete">
+		DELETE FROM coaching_board_reply
+		WHERE rno = #{rno}
+	</delete>
+	
+	<select id="rp_count" resultType="int">
+		SELECT COUNT(*) FROM coaching_board_reply WHERE bno = #{bno}
+	</select>
+	
+	<sql id="pagingHeader">
+		SELECT * FROM (
+			SELECT rno AS rn, A.* FROM (
+	</sql>
+	
+	<sql id="pagingFooter">
+					)A
+				)B WHERE rn BETWEEN #{start} AND #{end}
+	</sql>
+	
+	<select id="recent_score_six" resultType="com.crc.CSP.bean.CoachingBoardReplyVO">
+		SELECT * FROM coaching_board_reply 
+		WHERE writer=#{user_id}
+		AND content_type=#{content_type} 	
+	</select>
+	
+	<select id="rp_isread">
+		UPDATE coaching_board_reply
+		SET isRead = #{isRead}
+		WHERE bno = #{bno}
+	</select>
+	
+</mapper>

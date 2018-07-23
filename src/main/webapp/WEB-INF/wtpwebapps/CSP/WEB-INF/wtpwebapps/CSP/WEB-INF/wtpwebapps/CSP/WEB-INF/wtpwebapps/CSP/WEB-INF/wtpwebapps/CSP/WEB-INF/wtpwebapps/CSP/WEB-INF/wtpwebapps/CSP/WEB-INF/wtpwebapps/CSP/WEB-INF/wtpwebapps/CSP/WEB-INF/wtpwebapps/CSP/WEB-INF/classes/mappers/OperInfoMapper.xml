@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.crc.CSP.OperInfoMapper">
+	
+	<!-- 디폴트로 일주일 기간의 점수를 가져오기 -->
+	<select id="operinfo" resultType="com.crc.CSP.bean.OperInfoVO">
+		select * from oper_info where DATE between #{FROM_DT} and #{TO_DT}						
+											and id = #{id} 
+											and content_type = #{content}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,1 @@
+$(document).ready(function(){$("#list").click(function(t){t.preventDefault(),$("#products .item").addClass("list-group-item")}),$("#grid").click(function(t){t.preventDefault(),$("#products .item").removeClass("list-group-item"),$("#products .item").addClass("grid-group-item")})});

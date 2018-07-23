@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.crc.CSP.AuthTokenMapper">
+	
+	<select id="getAuthToken" resultType="com.crc.CSP.bean.AuthTokenVO">
+		SELECT 
+			ID, Token, TimeValid, UserId
+		FROM
+			auth_token
+		WHERE
+			Token = #{authtoken}
+	</select>
+	
+	<insert id="updateAuthToken">
+		INSERT INTO auth_token (Token, TimeValid, UserId) VALUES (#{Token}, #{TimeValid}, #{UserId})
+		ON DUPLICATE KEY UPDATE UserId=#{UserId}, Token=#{Token}, TimeValid=#{TimeValid}
+	</insert>
+	
+	
+</mapper>

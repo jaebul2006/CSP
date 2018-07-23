@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.UserMapper">
+
+	<select id='user' parameterType="String" resultType="UserBean">
+		select * from user where ID = #{id}
+	</select>
+
+	<insert id='user_regist' parameterType="hashMap">
+		insert into user (ID, PASSWORD, ENABLED, GROUPUSER, USERNAME) values (#{id}, #{p}, #{enabled}, #{g}, #{u})
+	</insert>
+
+	<insert id='userrole_regist' parameterType="hashMap">
+		insert into user_role (ID, AUTHORITY) values (#{id}, #{a})
+	</insert>
+
+	<delete id='user_delete' parameterType="String">
+		delete from user where ID = #{id}
+	</delete>
+
+	<delete id='user_role_delete' parameterType="String">
+		delete from user_role where ID = #{id}
+	</delete>
+
+</mapper>
+ 

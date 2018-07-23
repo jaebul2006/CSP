@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.LicenseMapper">
+
+	<insert id='insert_license' parameterType="hashMap">
+		insert into license_info (user_id, content, imp_uid, merchant_uid, paid_amount, apply_num ) 
+			values (#{user_id}, #{content}, #{imp_uid}, #{merchant_uid}, #{paid_amount}, #{apply_num})
+	</insert> 
+
+	<select id='check_license' parameterType="String" resultType="com.crc.CSP.bean.LicenseVO">
+		select * from license_info where user_id = #{user_id}
+	</select>
+</mapper>

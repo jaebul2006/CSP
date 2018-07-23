@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.crc.CSP.OperInfoMapper">
+	
+	
+	<select id="operinfo" resultType="com.crc.CSP.bean.OperInfoVO">
+		SELECT * FROM oper_info 
+		WHERE id = #{id} 
+		AND content_type = #{content}
+		ORDER BY DATE LIMIT 10
+	</select>
+	
+	<select id="operinfo_comp" resultType="com.crc.CSP.bean.OperInfoVO">
+		SELECT * FROM oper_info 
+		WHERE id = #{id} 
+		AND content_type = #{content}
+		ORDER BY DATE LIMIT 20
+	</select>
+	
+	
+</mapper>

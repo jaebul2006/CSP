@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.CoachingBoardMapper">
+	<!--  
+	<select id="board_listAll" resultType="com.crc.CSP.bean.CoachingBoardVO">
+		SELECT * FROM 
+		(
+			SELECT bno as rn, A.* FROM
+			(
+				SELECT b.bno, b.title, b.content, b.regdate, b.viewcnt, m.user_id AS userName, b.isshow,
+				(SELECT COUNT(*) FROM coaching_board_reply WHERE b.bno=br.bno) AS recnt
+				FROM coaching_board b, member m, coaching_board_reply br
+				<choose>
+					<when test="searchOption == 'all'">
+						WHERE 
+							b.writer = m.user_id
+						AND	
+							(user_name like '%'||#{keyword}||'%'
+						OR 
+							content like '%'||#{keyword}||'%'
+						OR 
+							title like '%'||#{keyword}||'%')
+					</when>
+					<otherwise>
+						WHERE 
+							b.writer = m.user_id 
+						AND 
+							${searchOption} like '%'||#{keyword}||'%'
+					</otherwise>
+				</choose>
+			)A
+		)B WHERE rn BETWEEN #{start} AND #{end}
+	</select> 
+	-->  
+	
+	<!--  
+	<select id="board_listAll" resultType="com.crc.CSP.bean.CoachingBoardVO">
+		<include refid="pagingHeader"></include>
+			SELECT 
+				b.bno, b.title, b.content, b.regdate, b.viewcnt, m.user_id AS userName, b.isshow, b.fileName,
+				(SELECT COUNT(*) FROM coaching_board_reply WHERE b.bno=bno) AS recnt
+			FROM 
+				coaching_board b, member m
+			<include refid="search"></include> 
+			ORDER BY b.bno DESC, b.regdate DESC 
+		<include refid="pagingFooter"></include>
+	</select>
+	-->
+	<select id="board_listAll" resultType="com.crc.CSP.bean.CoachingBoardVO">
+			SELECT *
+			FROM 
+				coaching_board
+			WHERE
+				writer = #{user_id}
+			ORDER BY bno DESC 
+	</select>
+	
+	
+	<select id="board_countArticle" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			coaching_board
+		WHERE 
+			writer = #{user_id}
+	</select>
+	
+	<insert id="board_insert">
+		INSERT INTO coaching_board (title, content, writer, isshow, fileName) 
+		VALUES (#{title}, #{content}, #{writer}, 'y', #{fileName})
+	</insert>
+	
+	<select id="board_view" resultType="com.crc.CSP.bean.CoachingBoardVO">
+		SELECT 
+			b.bno, b.title, b.content, b.regdate, b.writer, b.viewcnt, b.userName, b.isshow, b.fileName
+		FROM
+			coaching_board b, member m
+		WHERE
+			b.writer = m.user_id
+		AND
+			b.bno = #{bno}
+	</select>
+
+	<update id="board_increaseViewcnt">
+		UPDATE
+			coaching_board
+		SET
+			viewcnt = viewcnt + 1
+		WHERE
+			bno = #{bno}
+	</update>
+	
+	<update id="board_updateArticle">
+		UPDATE 
+			coaching_board
+		SET
+			title = #{title},
+			content = #{content}
+		WHERE
+			bno = #{bno}
+	</update>
+	
+	<update id="board_deleteArticle">
+		UPDATE 
+			coaching_board
+		SET
+			show = 'n'
+		WHERE
+			bno = #{bno}
+	</update>
+	
+	<sql id="search">
+		<choose>
+			<when test="searchOption == 'all'">
+				WHERE
+					b.writer = m.user_id
+				AND
+					(user_name like '%'||#{keyword}||'%')
+				OR
+					content like '%'||#{keyword}||'%'
+				OR
+					title like '%'||#{keyword}||'%')
+			</when>
+			<otherwise>
+				WHERE
+					b.writer = m.user_id
+				AND
+					${searchOption} like '%'||#{keyword}||'%'
+			</otherwise>
+		</choose>
+	</sql>
+	
+	<sql id="pagingHeader">
+		SELECT * FROM (
+				SELECT bno AS rn, A.* FROM (
+	</sql>
+	<sql id="pagingFooter">
+				)A
+		)B WHERE rn BETWEEN #{start} AND #{end}
+	</sql>
+	
+	<select id="board_getAttach" resultType="String">
+		SELECT fullname FROM coaching_board_attach WHERE bno = #{bno} ORDER BY regdate
+	</select>
+	
+	<insert id="board_updateAttach">
+		INSERT INTO coaching_board_attach (fullname, bno) VALUES (#{fullname}, #{bno})
+	</insert> 
+	
+	<delete id="board_deleteAttach">
+		DELETE FROM coaching_board_attach WHERE fullname = #{fullname}
+	</delete>
+	
+	<select id="board_TlistAll" resultType="com.crc.CSP.bean.CoachingBoardVO">
+			SELECT *
+			FROM 
+				coaching_board
+			ORDER BY bno DESC 
+	</select>
+	
+	<select id="board_TcountArticle" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			coaching_board
+	</select>
+	
+	
+</mapper>

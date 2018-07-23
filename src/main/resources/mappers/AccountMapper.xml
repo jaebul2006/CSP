@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.AccountMapper">
+	
+	<insert id="account_regist">
+		INSERT INTO account (AdminID, MacAddress) 
+		VALUES (#{AdminID}, #{MacAddress})
+	</insert>
+	
+	<select id="getAccount" resultType="com.crc.CSP.bean.AccountVO">
+		SELECT 
+			ID, AdminID, MacAddress, LastLogin, AuthToken
+		FROM
+			account
+		WHERE
+			ID = #{id}
+	</select>
+	
+	<select id="getAccountAdmin" resultType="com.crc.CSP.bean.AccountVO">
+		SELECT 
+			ID, AdminID, MacAddress, LastLogin, AuthToken
+		FROM
+			account
+		WHERE
+			AdminID = #{AdminID}
+	</select>
+	
+	<update id="updateLastInfo">
+		UPDATE
+			account
+		SET
+			LastLogin = #{LastLogin},
+			AuthToken = #{AuthToken}
+		WHERE
+			ID = #{ID}
+	</update>
+	
+	<select id="countAdminID" resultType="int">
+		SELECT COUNT(*)
+		FROM
+			account
+		WHERE 
+			AdminID = #{adminID}
+	</select>
+	
+	<update id="ChangeMacAddress">
+		UPDATE
+			account
+		SET
+			MacAddress = #{newMacAddress}
+		WHERE
+			AdminID = #{id}
+	</update>
+	
+	<select id="getAccountByUid" resultType="com.crc.CSP.bean.AccountVO">
+		SELECT 
+			ID, AdminID, MacAddress, LastLogin, AuthToken
+		FROM
+			account
+		WHERE
+			AuthToken = #{uid}
+	</select>
+	
+	<select id="getContentAuthority" resultType="com.crc.CSP.bean.ContentAuthorityVO">
+		SELECT
+			admin_id, tsa, os
+		FROM
+			content_authority
+		WHERE
+			admin_id = #{admin_id}
+	</select>
+	
+	<insert id="insertContentAuthority">
+		INSERT INTO content_authority (admin_id, tsa, os) 
+		VALUES (#{admin_id}, 1, 1)
+	</insert>
+	
+	
+</mapper>

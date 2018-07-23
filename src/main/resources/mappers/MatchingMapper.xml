@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.MatchingMapper">
+
+	<select id="getMatching" resultType="com.crc.CSP.bean.MatchingVO">
+		SELECT * FROM matching_tbl
+		WHERE app_date = #{app_date}
+		AND time_region = #{time_region}
+		AND enable = 1
+	</select>
+	
+	<insert id="regMatching">
+		INSERT INTO matching_tbl (id, max_person, cur_person, enable, app_date, time_want, time_region, user_id, is_host)
+		VALUES (#{id}, #{max_person}, #{cur_person}, #{enable}, #{app_date}, #{time_want}, #{time_region}, #{user_id}, #{is_host})
+	</insert>
+	
+	<insert id="regGoingApp">
+		INSERT INTO going_appointment (id, matching_tbl_id, user_id, finish, app_date, time_want, time_region)
+		VALUES (#{id}, #{matching_tbl_id}, #{user_id}, #{finish}, #{app_date}, #{time_want}, #{time_region})
+	</insert>
+	
+	<select id="findMatchingIdFromGoingAppointment" resultType="com.crc.CSP.bean.GoingAppointmentVO">
+		SELECT * FROM going_appointment
+		WHERE matching_tbl_id = #{matching_tbl_id}
+		AND finish = 0
+	</select>
+	
+	<update id="disableMatchingTbl">
+		UPDATE 
+			matching_tbl
+		SET
+			enable = 0,
+			cur_person = #{cur_person}
+		WHERE
+			id = #{matching_tbl_id}
+	</update>
+	
+	<update id="disableGoingAppointment">
+		UPDATE 
+			going_appointment
+		SET
+			finish = 1
+		WHERE
+			matching_tbl_id = #{matching_tbl_id}
+	</update>
+	
+	<update id="matchingAddCurPerson">
+		UPDATE 
+			matching_tbl
+		SET
+			cur_person = #{cur_person}
+		WHERE
+			id = #{matching_tbl_id}
+	</update>
+	
+	<insert id="addGoingAppointment">
+		INSERT INTO going_appointment (id, matching_tbl_id, user_id, finish, app_date, time_want, time_region)
+		VALUES (#{id}, #{matching_tbl_id}, #{user_id}, #{finish}, #{app_date}, #{time_want}, #{time_region})
+	</insert>
+	
+	<select id="allGoingAppointment" resultType="com.crc.CSP.bean.GoingAppointmentVO">
+		SELECT * FROM going_appointment
+		WHERE user_id = #{user_id}
+		AND finish = 0
+	</select>
+	
+	<select id="finishAppointment" resultType="com.crc.CSP.bean.GoingAppointmentVO">
+		SELECT * FROM going_appointment
+		WHERE user_id = #{user_id}
+		AND finish = 1
+	</select>
+	
+	<select id="finishMatchingMember" resultType="com.crc.CSP.bean.GoingAppointmentVO">
+		SELECT * FROM going_appointment
+		WHERE matching_tbl_id = #{matching_id}
+	</select>
+	
+	<select id="getPhoneNumber" resultType="String">
+		SELECT phone_number 
+		FROM user_phone_number
+		WHERE user_id = #{user_id}
+	</select>
+	
+	<select id="getPushToken" resultType="String">
+		SELECT push_token 
+		FROM user_push_token
+		WHERE user_id = #{user_id}
+	</select>
+	
+	<insert id="regLocation">
+		INSERT INTO matching_location (matching_tbl_id, latitude, longitude, loc_address)
+		VALUES (#{matching_tbl_id}, #{latitude}, #{longitude}, #{loc_address})
+	</insert>
+	
+</mapper>

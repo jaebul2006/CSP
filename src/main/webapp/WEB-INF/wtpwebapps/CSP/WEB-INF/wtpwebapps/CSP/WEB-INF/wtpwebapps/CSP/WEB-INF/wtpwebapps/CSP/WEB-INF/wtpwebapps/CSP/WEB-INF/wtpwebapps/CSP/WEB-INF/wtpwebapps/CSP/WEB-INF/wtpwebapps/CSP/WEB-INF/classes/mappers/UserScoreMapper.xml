@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.crc.CSP.UserScoreMapper">
+
+	<insert id='update_userscore' parameterType="hashMap">
+		insert into user_score (ID, CONTENT, DATE, TIME, SCORE ) values (#{id}, #{content}, #{date}, #{time}, #{score})
+	</insert> 
+
+	<select id='userscore' parameterType="hashMap" resultType="UserScoreBean">
+		<!-- select * from user_score where ID = #{id} 
+										and CONTENT = #{content} -->
+			select * from user_score where DATE between #{FROM_DT} and #{TO_DT}						
+											and ID = #{id} 
+											and CONTENT = #{content}	
+	</select>
+
+</mapper>
